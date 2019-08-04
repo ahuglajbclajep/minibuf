@@ -5,7 +5,8 @@
   "scripts": {
     "start": "webpack-dev-server --open",
     "build": "webpack --mode=production",
-    "lint": "eslint src/**/*.ts{,x}"
+    "lint": "eslint src/**/*.ts{,x}",
+    "deploy": "rm -rf dist && npm run build && gh-pages -d dist"
   },
   "dependencies": {
     "comlink": "^4.0.2",
@@ -23,6 +24,7 @@
     "eslint": "^6.1.0",
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-react": "^7.14.3",
+    "gh-pages": "2.0.1",
     "html-webpack-plugin": "^4.0.0-beta.8",
     "mini-css-extract-plugin": "^0.8.0",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
