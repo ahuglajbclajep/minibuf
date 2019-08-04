@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
     "target": "es6",
+    // see https://github.com/Microsoft/TypeScript/issues/16675
+    "module": "esnext",
     "jsx": "react",
     "jsxFactory": "h",
     "sourceMap": true,
