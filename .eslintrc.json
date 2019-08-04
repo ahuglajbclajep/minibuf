@@ -12,5 +12,13 @@
     "prettier",
     "prettier/@typescript-eslint",
     "prettier/react"
-  ]
+  ],
+  "rules": {
+    // see https://github.com/typescript-eslint/typescript-eslint/issues/493
+    "@typescript-eslint/explicit-function-return-type": [
+      "warn",
+      { "allowExpressions": true, "allowTypedFunctionExpressions": true }
+    ],
+    "@typescript-eslint/prefer-interface": "off" // deprecated
+  }
 }

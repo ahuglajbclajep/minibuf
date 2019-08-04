@@ -1,4 +1,5 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const WorkerPlugin = require("worker-plugin");
 
 module.exports = (env, { mode }) => ({
   mode: "development",
@@ -11,7 +12,10 @@ module.exports = (env, { mode }) => ({
       }
     ]
   },
-  plugins: [new HtmlWebpackPlugin({ template: "src/index.html" })],
+  plugins: [
+    new HtmlWebpackPlugin({ template: "src/index.html" }),
+    new WorkerPlugin({ globalObject: false })
+  ],
   resolve: { extensions: [".ts", ".tsx", ".js"] },
   devtool: mode === "development" ? "inline-source-map" : "none",
   devServer: {

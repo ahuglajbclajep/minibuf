@@ -8,7 +8,11 @@
     "lint": "eslint src/**/*.ts{,x}"
   },
   "dependencies": {
-    "preact": "^8.5.0"
+    "preact": "^10.0.0-rc.1",
+    "rehype-stringify": "^6.0.0",
+    "remark-parse": "^7.0.0",
+    "remark-rehype": "^5.0.0",
+    "unified": "^8.3.2"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^1.13.0",
@@ -21,6 +25,7 @@
     "typescript": "^3.5.3",
     "webpack": "^4.39.1",
     "webpack-cli": "^3.3.6",
-    "webpack-dev-server": "^3.7.2"
+    "webpack-dev-server": "^3.7.2",
+    "worker-plugin": "^3.1.0"
   }
 }
