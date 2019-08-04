@@ -1,5 +1,7 @@
 import { h, render, FunctionComponent } from "preact";
 import { useState } from "preact/hooks";
+import "github-markdown-css/github-markdown.css";
+import "./style.css";
 
 const worker = new Worker("./worker", { type: "module" });
 const receive: () => Promise<string> = () =>
@@ -14,10 +16,17 @@ const App: FunctionComponent = () => {
   };
 
   return (
-    // see https://github.com/Microsoft/TypeScript/issues/20469
-    <div>
-      <textarea onInput={onInput} />
-      <div dangerouslySetInnerHTML={{ __html: html }} />
+    <div className="container">
+      <textarea
+        className="edit-area"
+        onInput={onInput}
+        autoFocus
+        placeholder="# mdpreview"
+      />
+      <div
+        className="markdown-body"
+        dangerouslySetInnerHTML={{ __html: html }}
+      />
     </div>
   );
 };
