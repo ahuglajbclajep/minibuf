@@ -1,0 +1,16 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": { "project": "tsconfig.json" },
+  // see https://github.com/preactjs/preact-cli/blob/v3.0.0-rc.4/.eslintrc#L20
+  "settings": { "react": { "version": "preact", "pragma": "h" } },
+  "plugins": ["@typescript-eslint"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "prettier",
+    "prettier/@typescript-eslint",
+    "prettier/react"
+  ]
+}
