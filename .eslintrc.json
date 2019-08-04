@@ -19,6 +19,8 @@
       "warn",
       { "allowExpressions": true, "allowTypedFunctionExpressions": true }
     ],
-    "@typescript-eslint/prefer-interface": "off" // deprecated
+    "@typescript-eslint/explicit-member-accessibility": "off",
+    "@typescript-eslint/prefer-interface": "off", // deprecated
+    "react/prop-types": "off"
   }
 }

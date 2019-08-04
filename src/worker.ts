@@ -2,16 +2,19 @@ import unified from "unified";
 import parse from "remark-parse";
 import mutate from "remark-rehype";
 import stringify from "rehype-stringify";
+import { expose } from "comlink";
 
-// see https://github.com/webpack-contrib/worker-loader/issues/94
-declare const self: Worker;
+class WebWorker {
+  md2html(markdown: string): string {
+    return unified()
+      .use(parse)
+      .use(mutate)
+      .use(stringify)
+      .processSync(markdown)
+      .toString();
+  }
+}
 
-const md2html: (markdown: string) => string = markdown =>
-  unified()
-    .use(parse)
-    .use(mutate)
-    .use(stringify)
-    .processSync(markdown)
-    .toString();
+expose(WebWorker);
 
-self.onmessage = e => self.postMessage(md2html(e.data));
+export type WorkerAPI = typeof WebWorker;

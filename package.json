@@ -8,6 +8,7 @@
     "lint": "eslint src/**/*.ts{,x}"
   },
   "dependencies": {
+    "comlink": "^4.0.2",
     "github-markdown-css": "^3.0.1",
     "preact": "^10.0.0-rc.1",
     "rehype-stringify": "^6.0.0",

@@ -963,6 +963,11 @@ color@^3.0.0:
     color-convert "^1.9.1"
     color-string "^1.5.2"
 
+comlink@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/comlink/-/comlink-4.0.2.tgz#32016fe610dcb7f2a73aaaaa269ef1b29fec8db6"
+  integrity sha512-nLfo59BESda/NI3IFYNkEy2SIopH2W6Bt5uplek1IjAmBI0JJ78IE6GbZPfVL8Ux5TIMbCZnrU2cgubdhCUDnQ==
+
 comma-separated-tokens@^1.0.1:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/comma-separated-tokens/-/comma-separated-tokens-1.0.7.tgz#419cd7fb3258b1ed838dc0953167a25e152f5b59"
