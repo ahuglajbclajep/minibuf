@@ -20,6 +20,8 @@
   },
   "devDependencies": {
     "@types/prettier": "^1.18.1",
+    "@types/webpack": "^4.32.1",
+    "@types/webpack-dev-server": "^3.1.7",
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
     "css-loader": "^3.1.0",

@@ -1,10 +1,10 @@
-const TerserPlugin = require("terser-webpack-plugin");
-
 const WorkerPlugin = require("worker-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const TerserPlugin = require("terser-webpack-plugin"); // from webpack
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
+/** @type {(env: typeof process.env, argv: { mode: string }) => import("webpack").Configuration} */
 module.exports = (env, { mode }) => {
   const dev = mode === "development";
   return {
