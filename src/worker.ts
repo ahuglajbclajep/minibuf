@@ -2,9 +2,10 @@ import unified from "unified";
 import parse from "remark-parse";
 import mutate from "remark-rehype";
 import stringify from "rehype-stringify";
+import { CursorResult as Formatted } from "prettier";
 import { expose } from "comlink";
 
-let format: typeof import("prettier/standalone").format | undefined;
+let format: typeof import("prettier/standalone").formatWithCursor | undefined;
 let mdPlugin: typeof import("prettier/parser-markdown") | undefined;
 
 class WebWorker {
@@ -17,10 +18,14 @@ class WebWorker {
       .toString();
   }
 
-  format(markdown: string): string {
+  format(markdown: string, cursorOffset: number): Formatted {
     return format && mdPlugin
-      ? format(markdown, { parser: "markdown", plugins: [mdPlugin] })
-      : markdown;
+      ? format(markdown, {
+          cursorOffset,
+          parser: "markdown",
+          plugins: [mdPlugin]
+        })
+      : { formatted: markdown, cursorOffset };
   }
 }
 
@@ -31,7 +36,7 @@ expose(WebWorker);
     import("prettier/standalone"),
     import("prettier/parser-markdown")
   ]);
-  format = formatter.format;
+  format = formatter.formatWithCursor;
   mdPlugin = plugin;
 })();
 

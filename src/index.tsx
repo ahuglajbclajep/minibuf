@@ -1,5 +1,5 @@
 import { h, render, FunctionComponent } from "preact";
-import { useState } from "preact/hooks";
+import { useState, useRef, useEffect } from "preact/hooks";
 import { wrap } from "comlink";
 import { WorkerAPI } from "./worker";
 import "github-markdown-css/github-markdown.css";
@@ -9,6 +9,8 @@ type Props = { worker: ComlinkClass<WorkerAPI> };
 const App: FunctionComponent<Props> = ({ worker }) => {
   const [markdown, setMarkdown] = useState("");
   const [html, setHtml] = useState("");
+  const textarea = useRef<HTMLTextAreaElement>();
+  const cursor = useRef(0);
 
   const onInput: h.JSX.GenericEventHandler = async e => {
     const md = (e.target as HTMLTextAreaElement).value;
@@ -17,17 +19,27 @@ const App: FunctionComponent<Props> = ({ worker }) => {
   };
 
   const onKeyDown: h.JSX.KeyboardEventHandler = async e => {
-    if (e.ctrlKey && e.key === "s") {
+    if (textarea.current && e.ctrlKey && e.key === "s") {
       e.preventDefault();
-      setMarkdown(await worker.format(markdown));
+      const { formatted, cursorOffset } = await worker.format(
+        markdown,
+        textarea.current.selectionStart
+      );
+      setMarkdown(formatted);
+      cursor.current = cursorOffset;
     }
   };
+
+  useEffect(() => {
+    if (textarea.current) textarea.current.selectionEnd = cursor.current;
+  }, [cursor.current]);
 
   return (
     // see https://stackoverflow.com/questions/43503964/onkeydown-event-not-working-on-divs-in-react
     <div className="container" tabIndex={0} onKeyDown={onKeyDown}>
       <textarea
         className="edit-area"
+        ref={textarea}
         value={markdown}
         onInput={onInput}
         autoFocus
