@@ -9,4 +9,4 @@ type ComlinkClass<T extends new (...args: any) => any> = InstanceType<
   ? U
   : unknown;
 
-type Data = { markdown: string; cursor: number; html: string };
+type Data = { markdown: string; html: string; cursor: number };

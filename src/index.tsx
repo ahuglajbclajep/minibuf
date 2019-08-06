@@ -28,12 +28,12 @@ const App: FunctionComponent<Props> = ({ worker, data }) => {
       );
       setMarkdown(formatted);
       cursor.current = cursorOffset;
-    } else if (e.ctrlKey && e.key === "d") {
-      e.preventDefault();
-      download(markdown);
     } else if (e.ctrlKey && e.key === "s" && textarea.current) {
       e.preventDefault();
       worker.save(markdown, textarea.current.selectionStart);
+    } else if (e.ctrlKey && e.key === "d") {
+      e.preventDefault();
+      download(markdown);
     }
   };
 

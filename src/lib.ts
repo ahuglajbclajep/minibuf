@@ -1,3 +1,13 @@
+const readme = `# mdpreview
+
+Small and fast Markdown previewer/editor with formatter.
+
+- format: \`ctrl\` + \`f\`
+- save: \`ctrl\` + \`s\`
+- download: \`ctrl\` + \`d\`
+
+GitHub: <https://github.com/ahuglajbclajep/mdpreview>`;
+
 function now(): string {
   const now = new Date();
   const year = now.getFullYear();
@@ -18,4 +28,4 @@ function download(markdown: string): void {
   e.dispatchEvent(new MouseEvent("click"));
 }
 
-export { download };
+export { readme, download };

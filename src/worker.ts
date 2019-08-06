@@ -5,6 +5,7 @@ import stringify from "rehype-stringify";
 import { CursorResult as Formatted } from "prettier";
 import { set, get } from "idb-keyval";
 import { expose } from "comlink";
+import { readme } from "./lib";
 
 let format: typeof import("prettier/standalone").formatWithCursor | undefined;
 let mdPlugin: typeof import("prettier/parser-markdown") | undefined;
@@ -34,12 +35,13 @@ class WebWorker {
   }
 
   async load(): Promise<Data> {
-    const [markdown, cursor] = await Promise.all([
-      get<string>("markdown"),
-      get<number>("cursor")
+    const [md, cursor] = await Promise.all([
+      get<string | undefined>("markdown"),
+      get<number | undefined>("cursor")
     ]);
+    const markdown = md || readme;
     const html = await this.md2html(markdown);
-    return { markdown, html, cursor };
+    return { markdown, html, cursor: cursor || readme.length };
   }
 }
 
