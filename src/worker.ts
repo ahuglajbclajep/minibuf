@@ -3,6 +3,7 @@ import parse from "remark-parse";
 import mutate from "remark-rehype";
 import stringify from "rehype-stringify";
 import { CursorResult as Formatted } from "prettier";
+import { set, get } from "idb-keyval";
 import { expose } from "comlink";
 
 let format: typeof import("prettier/standalone").formatWithCursor | undefined;
@@ -26,6 +27,19 @@ class WebWorker {
           plugins: [mdPlugin]
         })
       : { formatted: markdown, cursorOffset };
+  }
+
+  save(markdown: string, cursor: number): void {
+    Promise.all([set("markdown", markdown), set("cursor", cursor)]);
+  }
+
+  async load(): Promise<Data> {
+    const [markdown, cursor] = await Promise.all([
+      get<string>("markdown"),
+      get<number>("cursor")
+    ]);
+    const html = await this.md2html(markdown);
+    return { markdown, html, cursor };
   }
 }
 

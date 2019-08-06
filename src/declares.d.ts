@@ -8,3 +8,5 @@ type ComlinkClass<T extends new (...args: any) => any> = InstanceType<
 > extends Promise<infer U>
   ? U
   : unknown;
+
+type Data = { markdown: string; cursor: number; html: string };

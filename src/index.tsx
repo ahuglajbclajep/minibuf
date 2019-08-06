@@ -6,12 +6,12 @@ import { download } from "./lib";
 import "github-markdown-css/github-markdown.css";
 import "./style.css";
 
-type Props = { worker: ComlinkClass<WorkerAPI> };
-const App: FunctionComponent<Props> = ({ worker }) => {
-  const [markdown, setMarkdown] = useState("");
-  const [html, setHtml] = useState("");
+type Props = { worker: ComlinkClass<WorkerAPI>; data: Data };
+const App: FunctionComponent<Props> = ({ worker, data }) => {
+  const [markdown, setMarkdown] = useState(data.markdown);
+  const [html, setHtml] = useState(data.html);
   const textarea = useRef<HTMLTextAreaElement>();
-  const cursor = useRef(0);
+  const cursor = useRef(data.cursor);
 
   const onInput: h.JSX.GenericEventHandler = async e => {
     const md = (e.target as HTMLTextAreaElement).value;
@@ -31,6 +31,9 @@ const App: FunctionComponent<Props> = ({ worker }) => {
     } else if (e.ctrlKey && e.key === "d") {
       e.preventDefault();
       download(markdown);
+    } else if (e.ctrlKey && e.key === "s" && textarea.current) {
+      e.preventDefault();
+      worker.save(markdown, textarea.current.selectionStart);
     }
   };
 
@@ -60,5 +63,6 @@ const App: FunctionComponent<Props> = ({ worker }) => {
 (async () => {
   const WebWorker = wrap<WorkerAPI>(new Worker("./worker", { type: "module" }));
   const worker = await new WebWorker();
-  render(<App worker={worker} />, document.body);
+  const data = await worker.load();
+  render(<App worker={worker} data={data} />, document.body);
 })();
