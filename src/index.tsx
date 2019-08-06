@@ -2,6 +2,7 @@ import { h, render, FunctionComponent } from "preact";
 import { useState, useRef, useEffect } from "preact/hooks";
 import { wrap } from "comlink";
 import { WorkerAPI } from "./worker";
+import { download } from "./lib";
 import "github-markdown-css/github-markdown.css";
 import "./style.css";
 
@@ -19,7 +20,7 @@ const App: FunctionComponent<Props> = ({ worker }) => {
   };
 
   const onKeyDown: h.JSX.KeyboardEventHandler = async e => {
-    if (textarea.current && e.ctrlKey && e.key === "s") {
+    if (e.ctrlKey && e.key === "f" && textarea.current) {
       e.preventDefault();
       const { formatted, cursorOffset } = await worker.format(
         markdown,
@@ -27,6 +28,9 @@ const App: FunctionComponent<Props> = ({ worker }) => {
       );
       setMarkdown(formatted);
       cursor.current = cursorOffset;
+    } else if (e.ctrlKey && e.key === "d") {
+      e.preventDefault();
+      download(markdown);
     }
   };
 
