@@ -16,7 +16,10 @@ const useSetStateWithCallback: <S>(
   (value: Arg1<StateUpdater<S>>, cb?: (state: S) => void) => void
 ] = initialState => {
   const [state, setState] = useState(initialState);
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+
+  // This hooks should work correctly because `useLayoutEffect()` is always
+  // executed without receiving `cb`.
+  /* eslint-disable @typescript-eslint/explicit-function-return-type, react-hooks/rules-of-hooks */
   const setStateWithCallback = (
     value: Arg1<typeof setState>,
     cb: (_: typeof state) => void = () => {}
@@ -24,6 +27,8 @@ const useSetStateWithCallback: <S>(
     setState(value);
     useLayoutEffect(() => cb(state));
   };
+  /* eslint-enable */
+
   return [state, setStateWithCallback];
 };
 
@@ -38,6 +43,8 @@ const useCallbackRef: <E extends HTMLElement>(
       setRef(node);
       cb(node);
     }
+    // If `cb` is included in the dependency, `cb` is called twice.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return [ref, cbRef];
 };

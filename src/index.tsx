@@ -46,6 +46,7 @@ const App: FunctionComponent<Props> = ({ worker, data }) => {
         value={markdown}
         onInput={onInput}
         autoFocus
+        spellcheck={false}
         placeholder="# mdpreview"
       />
       <div
