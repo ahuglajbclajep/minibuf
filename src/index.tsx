@@ -1,17 +1,18 @@
 import { h, render, FunctionComponent } from "preact";
-import { useState, useRef, useEffect } from "preact/hooks";
+import { useState, useSetStateWithCallback, useCallbackRef } from "./hooks";
 import { wrap } from "comlink";
 import { WorkerAPI } from "./worker";
-import { download } from "./lib";
+import { download, setCursor } from "./lib";
 import "github-markdown-css/github-markdown.css";
 import "./style.css";
 
 type Props = { worker: ComlinkClass<WorkerAPI>; data: Data };
 const App: FunctionComponent<Props> = ({ worker, data }) => {
-  const [markdown, setMarkdown] = useState(data.markdown);
+  const [markdown, setMarkdown] = useSetStateWithCallback(data.markdown);
   const [html, setHtml] = useState(data.html);
-  const textarea = useRef<HTMLTextAreaElement>();
-  const cursor = useRef(data.cursor);
+  const [textarea, cbRef] = useCallbackRef<HTMLTextAreaElement>(e =>
+    setCursor(e, data.cursor)
+  );
 
   const onInput: h.JSX.GenericEventHandler = async e => {
     const md = (e.target as HTMLTextAreaElement).value;
@@ -20,33 +21,28 @@ const App: FunctionComponent<Props> = ({ worker, data }) => {
   };
 
   const onKeyDown: h.JSX.KeyboardEventHandler = async e => {
-    if (e.ctrlKey && e.key === "f" && textarea.current) {
+    if (e.ctrlKey && e.key === "f") {
       e.preventDefault();
       const { formatted, cursorOffset } = await worker.format(
         markdown,
-        textarea.current.selectionStart
+        textarea.selectionStart
       );
-      setMarkdown(formatted);
-      cursor.current = cursorOffset;
-    } else if (e.ctrlKey && e.key === "s" && textarea.current) {
+      setMarkdown(formatted, () => setCursor(textarea, cursorOffset));
+    } else if (e.ctrlKey && e.key === "s") {
       e.preventDefault();
-      worker.save(markdown, textarea.current.selectionStart);
+      worker.save(markdown, textarea.selectionStart);
     } else if (e.ctrlKey && e.key === "d") {
       e.preventDefault();
       download(markdown);
     }
   };
 
-  useEffect(() => {
-    if (textarea.current) textarea.current.selectionEnd = cursor.current;
-  }, [cursor.current]);
-
   return (
     // see https://stackoverflow.com/questions/43503964/onkeydown-event-not-working-on-divs-in-react
     <div className="container" tabIndex={0} onKeyDown={onKeyDown}>
       <textarea
         className="edit-area"
-        ref={textarea}
+        ref={cbRef}
         value={markdown}
         onInput={onInput}
         autoFocus

@@ -28,4 +28,8 @@ function download(markdown: string): void {
   e.dispatchEvent(new MouseEvent("click"));
 }
 
-export { readme, download };
+function setCursor(element: HTMLTextAreaElement, cursor: number): void {
+  element.setSelectionRange(cursor, cursor);
+}
+
+export { readme, download, setCursor };
