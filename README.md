@@ -14,6 +14,7 @@ Try here: <https://ahuglajbclajep.github.io/mdpreview>
 
 - Fast loading with [Preact](https://preactjs.com) and [dynamic imports](https://webpack.js.org/guides/code-splitting/#dynamic-imports)
 - Compile Markdown without blocking input with [Comlink](https://github.com/GoogleChromeLabs/comlink)
+- Working even if offline with a Service Worker generated using [Workbox](https://developers.google.com/web/tools/workbox/)
 
 ## License
 
