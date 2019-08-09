@@ -1,6 +1,7 @@
 const WorkerPlugin = require("worker-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const { GenerateSW } = require("workbox-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin"); // from webpack
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
@@ -24,8 +25,15 @@ module.exports = (env, { mode }) => {
     },
     plugins: [
       new WorkerPlugin({ globalObject: false }),
+      new MiniCssExtractPlugin(),
       new HtmlWebpackPlugin({ template: "src/index.html" }),
-      new MiniCssExtractPlugin()
+      new GenerateSW({
+        skipWaiting: true,
+        clientsClaim: true,
+        // see https://github.com/GoogleChrome/workbox/issues/2064
+        inlineWorkboxRuntime: true,
+        sourcemap: false
+      })
     ],
     resolve: { extensions: [".ts", ".tsx", ".js"] },
     optimization: {

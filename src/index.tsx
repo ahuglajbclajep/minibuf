@@ -58,6 +58,10 @@ const App: FunctionComponent<Props> = ({ worker, data }) => {
 };
 
 (async () => {
+  addEventListener("load", () =>
+    navigator.serviceWorker.register("./service-worker.js")
+  );
+
   const WebWorker = wrap<WorkerAPI>(new Worker("./worker", { type: "module" }));
   const worker = await new WebWorker();
   const data = await worker.load();
