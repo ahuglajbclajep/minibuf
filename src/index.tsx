@@ -13,6 +13,9 @@ const App: FunctionComponent<Props> = ({ worker, data }) => {
   const [textarea, cbRef] = useCallbackRef<HTMLTextAreaElement>(e =>
     setCursor(e, data.cursor)
   );
+  const [darkMode, setDarkMode] = useState(
+    matchMedia("(prefers-color-scheme: dark)").matches
+  );
 
   const onInput: h.JSX.GenericEventHandler = async e => {
     const md = (e.target as HTMLTextAreaElement).value;
@@ -34,25 +37,33 @@ const App: FunctionComponent<Props> = ({ worker, data }) => {
     } else if (e.ctrlKey && e.key === "d") {
       e.preventDefault();
       download(markdown);
+    } else if (e.ctrlKey && e.key === "c") {
+      e.preventDefault();
+      setDarkMode(!darkMode);
     }
   };
 
   return (
+    // see https://github.com/sandoche/Darkmode.js
+    // see https://github.com/microsoft/TypeScript/issues/20469
     // see https://stackoverflow.com/questions/43503964/onkeydown-event-not-working-on-divs-in-react
-    <div className="container" tabIndex={0} onKeyDown={onKeyDown}>
-      <textarea
-        className="edit-area"
-        ref={cbRef}
-        value={markdown}
-        onInput={onInput}
-        autoFocus
-        spellcheck={false}
-        placeholder="# mdpreview"
-      />
-      <div
-        className="markdown-body"
-        dangerouslySetInnerHTML={{ __html: html }}
-      />
+    <div>
+      <div className={`dark-mode-layer ${darkMode ? "enable" : ""}`} />
+      <div className="container" tabIndex={0} onKeyDown={onKeyDown}>
+        <textarea
+          className="edit-area"
+          ref={cbRef}
+          value={markdown}
+          onInput={onInput}
+          autoFocus
+          spellcheck={false}
+          placeholder="# mdpreview"
+        />
+        <div
+          className="markdown-body"
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
+      </div>
     </div>
   );
 };

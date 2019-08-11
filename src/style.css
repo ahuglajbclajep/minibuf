@@ -1,3 +1,7 @@
+:focus {
+  outline: none;
+}
+
 body {
   margin: 0;
 }
@@ -21,10 +25,19 @@ body {
   color: #24292e;
 }
 
-.edit-area:focus {
-  outline: none;
-}
-
 .markdown-body {
   padding: 1em;
+  background: white;
+}
+
+.dark-mode-layer {
+  background: white;
+  mix-blend-mode: difference;
+}
+
+.enable {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
 }
