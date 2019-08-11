@@ -37,7 +37,7 @@ const App: FunctionComponent<Props> = ({ worker, data }) => {
     } else if (e.ctrlKey && e.key === "d") {
       e.preventDefault();
       download(markdown);
-    } else if (e.ctrlKey && e.key === "c") {
+    } else if (e.ctrlKey && e.key === "q") {
       e.preventDefault();
       setDarkMode(!darkMode);
     }

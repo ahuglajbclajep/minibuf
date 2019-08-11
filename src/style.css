@@ -6,6 +6,10 @@ body {
   margin: 0;
 }
 
+img {
+  isolation: isolate;
+}
+
 .container {
   display: flex;
   height: 100vh;
@@ -14,30 +18,36 @@ body {
 .container > * {
   flex: 1;
   overflow-y: scroll;
+  background: #fafafa;
+  color: #10151a;
 }
 
 .edit-area {
   resize: none;
   border: 0;
   padding: 1em;
-  font-family: "Courier New", Courier, monospace;
-  font-size: 16px;
-  color: #24292e;
+  font: 1.1em "Courier New", monospace;
 }
 
 .markdown-body {
   padding: 1em;
-  background: white;
 }
 
 .dark-mode-layer {
-  background: white;
-  mix-blend-mode: difference;
-}
-
-.enable {
+  opacity: 0;
   position: fixed;
   width: 100vw;
   height: 100vh;
   pointer-events: none;
+  background: #e1e1e1;
+  mix-blend-mode: difference;
+  transition: opacity 1s;
+}
+
+.enable {
+  opacity: 1;
+}
+
+.enable + * > .edit-area {
+  font-weight: bolder;
 }
