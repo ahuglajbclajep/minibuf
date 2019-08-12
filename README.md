@@ -9,7 +9,7 @@ Try here: <https://ahuglajbclajep.github.io/mdpreview>
 - format: `ctrl` + `f`
 - save: `ctrl` + `s`
 - download: `ctrl` + `d`
-- darkmode: `ctrl` + `q`
+- darkmode: `ctrl` + `e`
 
 ## Features
 

@@ -36,7 +36,7 @@ const App: FunctionComponent<Props> = ({ worker, state }) => {
     } else if (e.ctrlKey && e.key === "d") {
       e.preventDefault();
       download(markdown);
-    } else if (e.ctrlKey && e.key === "q") {
+    } else if (e.ctrlKey && e.key === "e") {
       e.preventDefault();
       setDarkmode(!darkmode);
     }
@@ -48,7 +48,7 @@ const App: FunctionComponent<Props> = ({ worker, state }) => {
     // see https://stackoverflow.com/questions/43503964/onkeydown-event-not-working-on-divs-in-react
     <div>
       <div className={`dark-layer ${darkmode ? "enable" : ""}`} />
-      <div className="container" tabIndex={0} onKeyDown={onKeyDown}>
+      <div className="container" tabIndex={-1} onKeyDown={onKeyDown}>
         <textarea
           className="edit-area"
           ref={cbRef}
