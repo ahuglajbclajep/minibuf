@@ -5,6 +5,7 @@ Small and fast Markdown previewer/editor with formatter.
 - format: \`ctrl\` + \`f\`
 - save: \`ctrl\` + \`s\`
 - download: \`ctrl\` + \`d\`
+- darkmode: \`ctrl\` + \`q\`
 
 GitHub: <https://github.com/ahuglajbclajep/mdpreview>`;
 

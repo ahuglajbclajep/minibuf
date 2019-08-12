@@ -33,7 +33,8 @@ img {
   padding: 1em;
 }
 
-.dark-mode-layer {
+/* see https://dev.wgao19.cc/sun-moon-blending-mode */
+.dark-layer {
   opacity: 0;
   position: fixed;
   width: 100vw;

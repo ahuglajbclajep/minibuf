@@ -6,16 +6,15 @@ import { download, setCursor } from "./lib";
 import "github-markdown-css/github-markdown.css";
 import "./style.css";
 
-type Props = { worker: ComlinkClass<WorkerAPI>; data: Data };
-const App: FunctionComponent<Props> = ({ worker, data }) => {
-  const [markdown, setMarkdown] = useSetStateWithCallback(data.markdown);
-  const [html, setHtml] = useState(data.html);
+type InitialState = Data & { darkmode: boolean };
+type Props = { worker: ComlinkClass<WorkerAPI>; state: InitialState };
+const App: FunctionComponent<Props> = ({ worker, state }) => {
+  const [markdown, setMarkdown] = useSetStateWithCallback(state.markdown);
+  const [html, setHtml] = useState(state.html);
   const [textarea, cbRef] = useCallbackRef<HTMLTextAreaElement>(e =>
-    setCursor(e, data.cursor)
+    setCursor(e, state.cursor)
   );
-  const [darkMode, setDarkMode] = useState(
-    matchMedia("(prefers-color-scheme: dark)").matches
-  );
+  const [darkmode, setDarkmode] = useState(state.darkmode);
 
   const onInput: h.JSX.GenericEventHandler = async e => {
     const md = (e.target as HTMLTextAreaElement).value;
@@ -39,16 +38,16 @@ const App: FunctionComponent<Props> = ({ worker, data }) => {
       download(markdown);
     } else if (e.ctrlKey && e.key === "q") {
       e.preventDefault();
-      setDarkMode(!darkMode);
+      setDarkmode(!darkmode);
     }
   };
 
   return (
-    // see https://github.com/sandoche/Darkmode.js
+    // see https://dev.wgao19.cc/sun-moon-blending-mode
     // see https://github.com/microsoft/TypeScript/issues/20469
     // see https://stackoverflow.com/questions/43503964/onkeydown-event-not-working-on-divs-in-react
     <div>
-      <div className={`dark-mode-layer ${darkMode ? "enable" : ""}`} />
+      <div className={`dark-layer ${darkmode ? "enable" : ""}`} />
       <div className="container" tabIndex={0} onKeyDown={onKeyDown}>
         <textarea
           className="edit-area"
@@ -76,5 +75,6 @@ const App: FunctionComponent<Props> = ({ worker, data }) => {
   const WebWorker = wrap<WorkerAPI>(new Worker("./worker", { type: "module" }));
   const worker = await new WebWorker();
   const data = await worker.load();
-  render(<App worker={worker} data={data} />, document.body);
+  const darkmode = matchMedia("(prefers-color-scheme: dark)").matches;
+  render(<App worker={worker} state={{ ...data, darkmode }} />, document.body);
 })();
