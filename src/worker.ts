@@ -40,7 +40,7 @@ class WebWorker {
       get<number | undefined>("cursor")
     ]);
     const markdown = md || readme;
-    const html = await this.md2html(markdown);
+    const html = this.md2html(markdown);
     return { markdown, html, cursor: cursor || readme.length };
   }
 }
