@@ -5,9 +5,10 @@
   "private": true,
   "scripts": {
     "start": "webpack-dev-server --open",
-    "build": "webpack -p",
+    "build": "rm -rf dist && webpack -p",
     "lint:ts": "eslint --fix 'src/**/*.[tj]s{,x}'",
-    "deploy": "rm -rf dist && npm run build && gh-pages -d dist"
+    "lint:css": "stylelint --fix 'src/**/*.css'",
+    "deploy": "npm run build && gh-pages -d dist"
   },
   "dependencies": {
     "github-markdown-css": "4.0.0",
@@ -36,6 +37,10 @@
     "html-webpack-plugin": "^4.0.3",
     "mini-css-extract-plugin": "^0.9.0",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "stylelint": "^13.2.1",
+    "stylelint-config-prettier": "^8.0.1",
+    "stylelint-config-recess-order": "^2.0.4",
+    "stylelint-config-standard": "^20.0.0",
     "ts-loader": "^6.2.2",
     "typescript": "^3.8.3",
     "webpack": "^4.42.1",
