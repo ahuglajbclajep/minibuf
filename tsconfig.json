@@ -3,11 +3,14 @@
     "target": "es2017",
     // see https://github.com/Microsoft/TypeScript/issues/16675
     "module": "esnext",
+    "allowJs": true,
     "jsx": "react",
     "jsxFactory": "h",
     "sourceMap": true,
     "strict": true,
     "moduleResolution": "node",
     "esModuleInterop": true
-  }
+  },
+  // see https://github.com/typescript-eslint/typescript-eslint/issues/890
+  "include": ["src/**/*"]
 }
