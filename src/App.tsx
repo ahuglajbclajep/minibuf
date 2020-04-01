@@ -1,6 +1,11 @@
-import { FunctionComponent, h, JSX } from "preact";
+import { Fragment, FunctionComponent, h, JSX } from "preact";
 import { useEffect, useRef, useState } from "preact/hooks";
-import { useDarkmode, useEffectAsync, useStorage } from "./hooks";
+import {
+  useCtrlKeyDown,
+  useDarkmode,
+  useEffectAsync,
+  useStorage
+} from "./hooks";
 import { download, readme, setCursor } from "./lib";
 import { format, md2html } from "./worker";
 
@@ -23,6 +28,20 @@ const App: FunctionComponent = () => {
     cursor.current = cursorPos;
   }, []);
 
+  useCtrlKeyDown("q", () => download(markdown));
+  useCtrlKeyDown("e", () => darkmodeToggle());
+  useCtrlKeyDown("s", () =>
+    save({ markdown, cursorPos: textarea.current.selectionStart })
+  );
+  useCtrlKeyDown("d", async () => {
+    const { formatted, cursorOffset } = await format(
+      markdown,
+      textarea.current.selectionStart
+    );
+    setMarkdown(formatted);
+    cursor.current = cursorOffset;
+  });
+
   useEffect(() => {
     setCursor(textarea.current, cursor.current);
   }, [cursor.current]);
@@ -34,34 +53,10 @@ const App: FunctionComponent = () => {
     setHtml(html);
   };
 
-  const onKeyDown: JSX.KeyboardEventHandler<HTMLElement> = async e => {
-    if (e.ctrlKey && e.key === "f") {
-      e.preventDefault();
-      const { formatted, cursorOffset } = await format(
-        markdown,
-        textarea.current.selectionStart
-      );
-      setMarkdown(formatted);
-      cursor.current = cursorOffset;
-    } else if (e.ctrlKey && e.key === "s") {
-      e.preventDefault();
-      save({ markdown, cursorPos: textarea.current.selectionStart });
-    } else if (e.ctrlKey && e.key === "d") {
-      e.preventDefault();
-      download(markdown);
-    } else if (e.ctrlKey && e.key === "e") {
-      e.preventDefault();
-      darkmodeToggle();
-    }
-  };
-
   return (
-    // see https://dev.wgao19.cc/sun-moon-blending-mode
-    // see https://github.com/microsoft/TypeScript/issues/20469
-    // see https://stackoverflow.com/questions/43503964/onkeydown-event-not-working-on-divs-in-react
-    <div>
+    <Fragment>
       <div className={`dark-layer ${darkmode ? "enable" : ""}`} />
-      <div className="container" tabIndex={-1} onKeyDown={onKeyDown}>
+      <div className="container">
         <textarea
           className="edit-area"
           value={markdown}
@@ -76,7 +71,7 @@ const App: FunctionComponent = () => {
           dangerouslySetInnerHTML={{ __html: html }}
         />
       </div>
-    </div>
+    </Fragment>
   );
 };
 
