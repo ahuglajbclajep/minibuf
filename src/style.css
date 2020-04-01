@@ -1,9 +1,26 @@
+*,
+::before,
+::after {
+  box-sizing: border-box;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
 :focus {
   outline: none;
 }
 
 body {
-  margin: 0;
+  overscroll-behavior: none;
+  background: #fafafa; /* for overscrolling in Safari */
+}
+
+img {
+  vertical-align: bottom;
+  isolation: isolate;
 }
 
 .container {
@@ -13,43 +30,36 @@ body {
 
 .container > * {
   flex: 1;
+  padding: 1em;
   overflow-y: scroll;
-  background: #fafafa;
   color: #10151a;
+  background: #fafafa;
 }
 
 .edit-area {
-  margin: 0;
-  border: 0;
-  padding: 1em;
-  resize: none;
   font: 1.1em "Courier New", monospace;
-}
-
-.markdown-body {
-  padding: 1em;
+  resize: none;
+  border: 0;
+  border-radius: 0; /* for iOS Safari */
 }
 
 /* see https://dev.wgao19.cc/sun-moon-blending-mode */
-img {
-  isolation: isolate;
-}
-
-.dark-layer {
-  opacity: 0;
+.container::before {
   position: fixed;
   width: 100vw;
   height: 100vh;
   pointer-events: none;
+  content: "";
   background: #e1e1e1;
   mix-blend-mode: difference;
+  opacity: 0;
   transition: opacity 1s;
 }
 
-.enable {
+.enable::before {
   opacity: 1;
 }
 
-.enable + * > .edit-area {
+.enable > .edit-area {
   font-weight: bolder;
 }

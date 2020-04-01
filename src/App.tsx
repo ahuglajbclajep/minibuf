@@ -54,10 +54,9 @@ const App: FunctionComponent = () => {
 
   return (
     <Fragment>
-      <div className={`dark-layer ${darkmode ? "enable" : ""}`} />
-      <div className="container">
+      <div class={`container dark-layer ${darkmode ? "enable" : ""}`}>
         <textarea
-          className="edit-area"
+          class="edit-area"
           value={markdown}
           onInput={onInput}
           ref={textarea}
