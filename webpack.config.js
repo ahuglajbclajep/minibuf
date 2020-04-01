@@ -1,21 +1,23 @@
-const WorkerPlugin = require("worker-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const WorkerPlugin = require("worker-plugin");
 const { GenerateSW } = require("workbox-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin"); // from webpack
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
-/** @type {(env: typeof process.env, argv: { mode: string }) => import("webpack").Configuration} */
+/** @type {(env: typeof process.env, argv: { mode?: string }) => import("webpack").Configuration} */
 module.exports = (env, { mode }) => {
-  const dev = mode === "development";
+  const dev = mode !== "production";
   return {
+    // see https://github.com/webpack/webpack-dev-server/issues/1327
     mode: "development",
     entry: "./src/index.tsx",
     module: {
       rules: [
         {
-          test: /\.tsx?$/,
-          use: "ts-loader"
+          test: /\.[tj]sx?$/,
+          use: "ts-loader",
+          exclude: /node_modules/
         },
         {
           test: /\.css$/,
@@ -24,22 +26,21 @@ module.exports = (env, { mode }) => {
       ]
     },
     plugins: [
-      new WorkerPlugin({ globalObject: false }),
-      new MiniCssExtractPlugin(),
       new HtmlWebpackPlugin({ template: "src/index.html" }),
+      new MiniCssExtractPlugin(),
+      new WorkerPlugin({ globalObject: false }),
       new GenerateSW({
-        skipWaiting: true,
         clientsClaim: true,
-        // see https://github.com/GoogleChrome/workbox/issues/2064
+        skipWaiting: true,
         inlineWorkboxRuntime: true,
-        sourcemap: false
+        sourcemap: dev
       })
     ],
     resolve: { extensions: [".ts", ".tsx", ".js"] },
     optimization: {
       minimizer: [new TerserPlugin(), new OptimizeCssAssetsPlugin()]
     },
-    devtool: dev ? "inline-source-map" : "none",
+    devtool: dev ? "inline-source-map" : false,
     devServer: {
       contentBase: "./dist",
       overlay: true,

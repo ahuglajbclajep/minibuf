@@ -1,10 +1,10 @@
-import { h, render, FunctionComponent } from "preact";
-import { useState, useSetStateWithCallback, useCallbackRef } from "./hooks";
 import { wrap } from "comlink";
-import { WorkerAPI } from "./worker";
-import { download, setCursor } from "./lib";
 import "github-markdown-css/github-markdown.css";
+import { FunctionComponent, h, render } from "preact";
+import { useCallbackRef, useSetStateWithCallback, useState } from "./hooks";
+import { download, setCursor } from "./lib";
 import "./style.css";
+import { WorkerAPI } from "./worker";
 
 type InitialState = Data & { darkmode: boolean };
 type Props = { worker: ComlinkClass<WorkerAPI>; state: InitialState };
@@ -68,13 +68,13 @@ const App: FunctionComponent<Props> = ({ worker, state }) => {
 };
 
 (async () => {
-  addEventListener("load", () => {
-    navigator.serviceWorker.register("./service-worker.js");
-  });
-
   const WebWorker = wrap<WorkerAPI>(new Worker("./worker", { type: "module" }));
   const worker = await new WebWorker();
   const data = await worker.load();
   const darkmode = matchMedia("(prefers-color-scheme: dark)").matches;
-  render(<App worker={worker} state={{ ...data, darkmode }} />, document.body);
+  render(
+    <App worker={worker} state={{ ...data, darkmode }} />,
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    document.getElementById("root")!
+  );
 })();
