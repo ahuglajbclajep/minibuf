@@ -1,13 +1,13 @@
-import { wrap } from "comlink";
+/* eslint-disable @typescript-eslint/await-thenable */
 import "github-markdown-css/github-markdown.css";
 import { FunctionComponent, h, render } from "preact";
 import { useCallbackRef, useSetStateWithCallback, useState } from "./hooks";
 import { download, setCursor } from "./lib";
 import "./style.css";
-import { WorkerAPI } from "./worker";
+import { WebWorker } from "./worker";
 
 type InitialState = Data & { darkmode: boolean };
-type Props = { worker: ComlinkClass<WorkerAPI>; state: InitialState };
+type Props = { worker: InstanceType<typeof WebWorker>; state: InitialState };
 const App: FunctionComponent<Props> = ({ worker, state }) => {
   const [markdown, setMarkdown] = useSetStateWithCallback(state.markdown);
   const [html, setHtml] = useState(state.html);
@@ -16,13 +16,13 @@ const App: FunctionComponent<Props> = ({ worker, state }) => {
   );
   const [darkmode, setDarkmode] = useState(state.darkmode);
 
-  const onInput: h.JSX.GenericEventHandler = async e => {
-    const md = (e.target as HTMLTextAreaElement).value;
+  const onInput: h.JSX.GenericEventHandler<HTMLTextAreaElement> = async e => {
+    const md = e.currentTarget.value;
     setMarkdown(md);
     setHtml(await worker.md2html(md));
   };
 
-  const onKeyDown: h.JSX.KeyboardEventHandler = async e => {
+  const onKeyDown: h.JSX.KeyboardEventHandler<HTMLElement> = async e => {
     if (e.ctrlKey && e.key === "f") {
       e.preventDefault();
       const { formatted, cursorOffset } = await worker.format(
@@ -68,7 +68,6 @@ const App: FunctionComponent<Props> = ({ worker, state }) => {
 };
 
 (async () => {
-  const WebWorker = wrap<WorkerAPI>(new Worker("./worker", { type: "module" }));
   const worker = await new WebWorker();
   const data = await worker.load();
   const darkmode = matchMedia("(prefers-color-scheme: dark)").matches;

@@ -1,10 +1,9 @@
-import unified from "unified";
+import { get, set } from "idb-keyval";
+import { CursorResult as Formatted } from "prettier";
+import stringify from "rehype-stringify";
 import parse from "remark-parse";
 import mutate from "remark-rehype";
-import stringify from "rehype-stringify";
-import { CursorResult as Formatted } from "prettier";
-import { set, get } from "idb-keyval";
-import { expose } from "comlink";
+import unified from "unified";
 import { readme } from "./lib";
 
 let format: typeof import("prettier/standalone").formatWithCursor | undefined;
@@ -45,15 +44,13 @@ class WebWorker {
   }
 }
 
-expose(WebWorker);
-
 (async () => {
   const [formatter, plugin] = await Promise.all([
     import("prettier/standalone"),
     import("prettier/parser-markdown")
-  ]);
+  ] as const);
   format = formatter.formatWithCursor;
   mdPlugin = plugin;
 })();
 
-export type WorkerAPI = typeof WebWorker;
+export { WebWorker };

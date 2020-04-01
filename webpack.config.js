@@ -1,6 +1,5 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const WorkerPlugin = require("worker-plugin");
 const { GenerateSW } = require("workbox-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin"); // from webpack
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
@@ -12,8 +11,15 @@ module.exports = (env, { mode }) => {
     // see https://github.com/webpack/webpack-dev-server/issues/1327
     mode: "development",
     entry: "./src/index.tsx",
+    // see https://github.com/webpack-contrib/worker-loader/issues/142
+    output: { globalObject: "self" },
     module: {
       rules: [
+        {
+          test: /\.?worker\.[tj]s$/,
+          // comlink-loader also receives worker-loader options
+          use: "comlink-loader?singleton&name=[name].js"
+        },
         {
           test: /\.[tj]sx?$/,
           use: "ts-loader",
@@ -28,7 +34,6 @@ module.exports = (env, { mode }) => {
     plugins: [
       new HtmlWebpackPlugin({ template: "src/index.html" }),
       new MiniCssExtractPlugin(),
-      new WorkerPlugin({ globalObject: false }),
       new GenerateSW({
         clientsClaim: true,
         skipWaiting: true,
