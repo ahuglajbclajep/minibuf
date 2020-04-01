@@ -2,12 +2,16 @@ const readme = `# mdpreview
 
 Small and fast Markdown previewer/editor with formatter.
 
-- format: \`ctrl\` + \`f\`
+- format: \`ctrl\` + \`d\`
 - save: \`ctrl\` + \`s\`
-- download: \`ctrl\` + \`d\`
+- download: \`ctrl\` + \`q\`
 - darkmode: \`ctrl\` + \`e\`
 
-GitHub: <https://github.com/ahuglajbclajep/mdpreview>`;
+GitHub: <https://github.com/ahuglajbclajep/mdpreview>
+
+`;
+
+const defaultData: Data = { markdown: readme, cursorPos: readme.length };
 
 function now(): string {
   const now = new Date();
@@ -22,15 +26,14 @@ function now(): string {
 
 function download(markdown: string): void {
   if (markdown.length === 0) return;
-  const e = document.createElement("a");
-  e.href = URL.createObjectURL(new Blob([markdown], { type: "text/markdown" }));
-  e.download = `${now()}.md`;
-  // see https://stackoverflow.com/questions/32225904/programmatical-click-on-a-tag-not-working-in-firefox
-  e.dispatchEvent(new MouseEvent("click"));
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([markdown], { type: "text/markdown" }));
+  a.download = `${now()}.md`;
+  a.dispatchEvent(new MouseEvent("click"));
 }
 
-function setCursor(element: HTMLTextAreaElement, cursor: number): void {
-  element.setSelectionRange(cursor, cursor);
+function moveCursor(textarea: HTMLTextAreaElement, cursorPos: number): void {
+  textarea.setSelectionRange(cursorPos, cursorPos);
 }
 
-export { readme, download, setCursor };
+export { defaultData, download, moveCursor };

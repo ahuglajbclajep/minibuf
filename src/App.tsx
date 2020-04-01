@@ -6,10 +6,8 @@ import {
   useEffectAsync,
   useStorage
 } from "./hooks";
-import { download, readme, setCursor } from "./lib";
+import { defaultData, download, moveCursor } from "./lib";
 import { format, md2html } from "./worker";
-
-const initialData: Data = { markdown: readme, cursorPos: readme.length };
 
 const App: FunctionComponent = () => {
   const [markdown, setMarkdown] = useState("");
@@ -21,7 +19,7 @@ const App: FunctionComponent = () => {
   const [darkmode, darkmodeToggle] = useDarkmode();
 
   useEffectAsync(async () => {
-    const { markdown, cursorPos } = (await load()) || initialData;
+    const { markdown, cursorPos } = (await load()) || defaultData;
     const html = await md2html(markdown);
     setMarkdown(markdown);
     setHtml(html);
@@ -43,7 +41,7 @@ const App: FunctionComponent = () => {
   });
 
   useEffect(() => {
-    setCursor(textarea.current, cursor.current);
+    moveCursor(textarea.current, cursor.current);
   }, [cursor.current]);
 
   const onInput: JSX.GenericEventHandler<HTMLTextAreaElement> = async e => {

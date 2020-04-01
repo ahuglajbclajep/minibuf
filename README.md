@@ -6,9 +6,9 @@ Try here: <https://ahuglajbclajep.github.io/mdpreview>
 
 ## Usage
 
-- format: `ctrl` + `f`
+- format: `ctrl` + `d`
 - save: `ctrl` + `s`
-- download: `ctrl` + `d`
+- download: `ctrl` + `q`
 - darkmode: `ctrl` + `e`
 
 ## Features

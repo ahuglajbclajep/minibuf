@@ -25,17 +25,14 @@ async function md2html(markdown: string): Promise<string> {
     .toString();
 }
 
-async function format(
-  markdown: string,
-  cursorOffset: number
-): Promise<Formatted> {
+async function format(markdown: string, cursorPos: number): Promise<Formatted> {
   return formatter && plugin
     ? formatter.formatWithCursor(markdown, {
-        cursorOffset,
+        cursorOffset: cursorPos,
         parser: "markdown",
         plugins: [plugin]
       })
-    : { formatted: markdown, cursorOffset };
+    : { formatted: markdown, cursorOffset: cursorPos };
 }
 
 export { md2html, format };
