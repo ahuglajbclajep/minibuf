@@ -6,6 +6,7 @@ import {
   useEffectAsync,
   useStorage
 } from "./hooks";
+import HtmlPreview from "./HtmlPreview";
 import { defaultData, download, moveCursor } from "./lib";
 import { format, md2html } from "./worker";
 
@@ -64,10 +65,7 @@ const App: FunctionComponent = () => {
           spellcheck={false}
           placeholder="# mdpreview"
         />
-        <div
-          className="markdown-body"
-          dangerouslySetInnerHTML={{ __html: html }}
-        />
+        <HtmlPreview html={html} />
       </div>
     </Fragment>
   );

@@ -12,6 +12,7 @@
   "dependencies": {
     "github-markdown-css": "4.0.0",
     "idb-keyval": "^3.2.0",
+    "morphdom": "^2.5.12",
     "preact": "^10.3.4",
     "prettier": "^2.0.2",
     "rehype-stringify": "^7.0.0",
