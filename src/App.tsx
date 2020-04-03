@@ -1,5 +1,5 @@
 import { Fragment, FunctionComponent, h, JSX } from "preact";
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useLayoutEffect, useRef, useState } from "preact/hooks";
 import {
   useCtrlKeyDown,
   useDarkmode,
@@ -13,7 +13,7 @@ import { format, md2html } from "./worker";
 const App: FunctionComponent = () => {
   const [markdown, setMarkdown] = useState("");
   const [html, setHtml] = useState("");
-  const cursor = useRef(0);
+  const formattedCursor = useRef<number | null>(null);
 
   const textarea = useRef<HTMLTextAreaElement>(null);
   const [save, load] = useStorage<Data>("mdprev-markdown");
@@ -24,7 +24,7 @@ const App: FunctionComponent = () => {
     const html = await md2html(markdown);
     setMarkdown(markdown);
     setHtml(html);
-    cursor.current = cursorPos;
+    formattedCursor.current = cursorPos;
   }, []);
 
   useCtrlKeyDown("q", () => download(markdown));
@@ -38,12 +38,15 @@ const App: FunctionComponent = () => {
       textarea.current.selectionStart
     );
     setMarkdown(formatted);
-    cursor.current = cursorOffset;
+    formattedCursor.current = cursorOffset;
   });
 
-  useEffect(() => {
-    moveCursor(textarea.current, cursor.current);
-  }, [cursor.current]);
+  useLayoutEffect(() => {
+    if (formattedCursor.current !== null) {
+      moveCursor(textarea.current, formattedCursor.current);
+      formattedCursor.current = null;
+    }
+  });
 
   const onInput: JSX.GenericEventHandler<HTMLTextAreaElement> = async e => {
     const markdown = e.currentTarget.value;
