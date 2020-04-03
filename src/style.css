@@ -14,8 +14,8 @@
 }
 
 body {
-  overscroll-behavior: none;
-  background: #fafafa; /* for overscrolling in Safari */
+  /* works like `overscroll-behavior: none;` except iOS Safari */
+  overflow: hidden;
 }
 
 img {
@@ -30,16 +30,17 @@ img {
 
 .container > * {
   flex: 1;
-  padding: 1em;
+  padding: 16px;
   overflow-y: scroll;
-  color: #10151a;
-  background: #fafafa;
+  background: #fff; /* for darkmode */
 }
 
 .edit-area {
-  font: 1.1em "Courier New", monospace;
+  font: 1.2em "Courier New", monospace;
+  color: #24292e;
   resize: none;
   border: 0;
+  border-right: 1px solid #e1e4e8;
   border-radius: 0; /* for iOS Safari */
 }
 
@@ -52,14 +53,6 @@ img {
   content: "";
   background: #e1e1e1;
   mix-blend-mode: difference;
-  opacity: 0;
+  opacity: var(--dark, 0);
   transition: opacity 1s;
-}
-
-.enable::before {
-  opacity: 1;
-}
-
-.enable > .edit-area {
-  font-weight: bolder;
 }

@@ -36,4 +36,7 @@ function moveCursor(textarea: HTMLTextAreaElement, cursorPos: number): void {
   textarea.setSelectionRange(cursorPos, cursorPos);
 }
 
-export { defaultData, download, moveCursor };
+const isWinChrome =
+  /Win/i.test(navigator.platform) && /Google/i.test(navigator.vendor);
+
+export { defaultData, download, moveCursor, isWinChrome };

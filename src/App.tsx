@@ -7,7 +7,7 @@ import {
   useStorage
 } from "./hooks";
 import HtmlPreview from "./HtmlPreview";
-import { defaultData, download, moveCursor } from "./lib";
+import { defaultData, download, isWinChrome, moveCursor } from "./lib";
 import { format, md2html } from "./worker";
 
 const App: FunctionComponent = () => {
@@ -54,9 +54,10 @@ const App: FunctionComponent = () => {
 
   return (
     <Fragment>
-      <div class={`container dark-layer ${darkmode ? "enable" : ""}`}>
+      <div class="container dark-layer" style={{ "--dark": +darkmode }}>
         <textarea
           class="edit-area"
+          style={{ fontWeight: isWinChrome && darkmode ? "bold" : "normal" }}
           value={markdown}
           onInput={onInput}
           ref={textarea}

@@ -48,6 +48,7 @@ module.exports = (env, { mode }) => {
     devtool: dev ? "inline-source-map" : false,
     devServer: {
       contentBase: "./dist",
+      // host: "0.0.0.0", // for debugging on mobile devices
       overlay: true,
       watchContentBase: true
     }
