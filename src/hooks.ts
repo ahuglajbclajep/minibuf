@@ -3,7 +3,7 @@ import { get, set } from "idb-keyval";
 import { Inputs, useCallback, useEffect, useRef, useState } from "preact/hooks";
 
 const useStorage = <T>(
-  key: IDBValidKey
+  key: string
 ): [(value: T) => Promise<void>, () => Promise<T | null>] => {
   const save = useCallback((value: T) => set(key, value), []);
   const load = useCallback(() => get<T | null>(key), []);
@@ -11,9 +11,9 @@ const useStorage = <T>(
   return [save, load];
 };
 
-const useDarkmode = (mode?: boolean): [boolean, () => void] => {
+const useDarkmode = (): [boolean, () => void] => {
   const [isDark, setMode] = useState(
-    mode ?? matchMedia("(prefers-color-scheme: dark)").matches
+    matchMedia("(prefers-color-scheme: dark)").matches
   );
   const toggle = useCallback(() => setMode(prev => !prev), []);
 
@@ -23,7 +23,7 @@ const useDarkmode = (mode?: boolean): [boolean, () => void] => {
 const useEffectAsync = (
   // cleanup function is not supported
   effect: () => Promise<void>,
-  inputs: Inputs = []
+  inputs?: Inputs
 ): void => {
   useEffect(() => {
     effect();

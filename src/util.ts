@@ -1,4 +1,4 @@
-const readme = `# mdpreview
+const markdown = `# mdpreview
 
 Small and fast Markdown previewer/editor with formatter.
 
@@ -8,10 +8,9 @@ Small and fast Markdown previewer/editor with formatter.
 - darkmode: \`ctrl\` + \`e\`
 
 GitHub: <https://github.com/ahuglajbclajep/mdpreview>
-
 `;
 
-const defaultData: Data = { markdown: readme, cursorPos: readme.length };
+const readme: Markdown = { markdown, cursor: markdown.length };
 
 function now(): string {
   const now = new Date();
@@ -32,11 +31,11 @@ function download(markdown: string): void {
   a.dispatchEvent(new MouseEvent("click"));
 }
 
-function moveCursor(textarea: HTMLTextAreaElement, cursorPos: number): void {
-  textarea.setSelectionRange(cursorPos, cursorPos);
+function moveCursor(textarea: HTMLTextAreaElement, position: number): void {
+  textarea.setSelectionRange(position, position);
 }
 
 const isWinChrome =
   /Win/i.test(navigator.platform) && /Google/i.test(navigator.vendor);
 
-export { defaultData, download, moveCursor, isWinChrome };
+export { readme, download, moveCursor, isWinChrome };

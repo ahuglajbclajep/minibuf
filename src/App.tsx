@@ -7,7 +7,7 @@ import {
   useStorage
 } from "./hooks";
 import HtmlPreview from "./HtmlPreview";
-import { defaultData, download, isWinChrome, moveCursor } from "./lib";
+import { download, isWinChrome, moveCursor, readme } from "./util";
 import { format, md2html } from "./worker";
 
 const App: FunctionComponent = () => {
@@ -16,21 +16,21 @@ const App: FunctionComponent = () => {
   const formattedCursor = useRef<number | null>(null);
 
   const textarea = useRef<HTMLTextAreaElement>(null);
-  const [save, load] = useStorage<Data>("mdprev-markdown");
-  const [darkmode, darkmodeToggle] = useDarkmode();
+  const [save, load] = useStorage<Markdown>("mdprev-markdown");
+  const [darkmode, toggleDarkmode] = useDarkmode();
 
   useEffectAsync(async () => {
-    const { markdown, cursorPos } = (await load()) || defaultData;
+    const { markdown, cursor } = (await load()) || readme;
     const html = await md2html(markdown);
     setMarkdown(markdown);
     setHtml(html);
-    formattedCursor.current = cursorPos;
+    formattedCursor.current = cursor;
   }, []);
 
   useCtrlKeyDown("q", () => download(markdown));
-  useCtrlKeyDown("e", () => darkmodeToggle());
+  useCtrlKeyDown("e", () => toggleDarkmode());
   useCtrlKeyDown("s", () =>
-    save({ markdown, cursorPos: textarea.current.selectionStart })
+    save({ markdown, cursor: textarea.current.selectionStart })
   );
   useCtrlKeyDown("d", async () => {
     const { formatted, cursorOffset } = await format(
