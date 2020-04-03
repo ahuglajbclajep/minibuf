@@ -1,23 +1,34 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { get, set } from "idb-keyval";
-import { Inputs, useCallback, useEffect, useRef, useState } from "preact/hooks";
+import {
+  Inputs,
+  StateUpdater,
+  useCallback,
+  useEffect,
+  useRef,
+  useState
+} from "preact/hooks";
 
+const useToggle = (
+  initialState: boolean
+): [boolean, () => void, StateUpdater<boolean>] => {
+  const [state, setState] = useState(initialState);
+  const toggle = useCallback(() => setState(prev => !prev), []);
+
+  return [state, toggle, setState];
+};
+
+const useDarkmode = (): ReturnType<typeof useToggle> =>
+  useToggle(matchMedia("(prefers-color-scheme: dark)").matches);
+
+const namespace = "mdprev";
 const useStorage = <T>(
   key: string
 ): [(value: T) => Promise<void>, () => Promise<T | null>] => {
-  const save = useCallback((value: T) => set(key, value), []);
-  const load = useCallback(() => get<T | null>(key), []);
+  const save = useCallback((value: T) => set(`${namespace}-${key}`, value), []);
+  const load = useCallback(() => get<T | null>(`${namespace}-${key}`), []);
 
   return [save, load];
-};
-
-const useDarkmode = (): [boolean, () => void] => {
-  const [isDark, setMode] = useState(
-    matchMedia("(prefers-color-scheme: dark)").matches
-  );
-  const toggle = useCallback(() => setMode(prev => !prev), []);
-
-  return [isDark, toggle];
 };
 
 const useEffectAsync = (
@@ -52,4 +63,4 @@ const useCtrlKeyDown = (key: string, handler: Handler): void => {
   }, []);
 };
 
-export { useStorage, useDarkmode, useEffectAsync, useCtrlKeyDown };
+export { useToggle, useDarkmode, useStorage, useEffectAsync, useCtrlKeyDown };

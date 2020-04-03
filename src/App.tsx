@@ -4,33 +4,38 @@ import {
   useCtrlKeyDown,
   useDarkmode,
   useEffectAsync,
-  useStorage
+  useStorage,
+  useToggle
 } from "./hooks";
-import HtmlPreview from "./HtmlPreview";
+import Previewer from "./Previewer";
 import { download, isWinChrome, moveCursor, readme } from "./util";
 import { format, md2html } from "./worker";
 
 const App: FunctionComponent = () => {
   const [markdown, setMarkdown] = useState("");
+  const [hardBreak, toggleHardBreak, setHardBreak] = useToggle(false);
   const [html, setHtml] = useState("");
+  const [darkMode, toggleDarkMode] = useDarkmode();
   const formattedCursor = useRef<number | null>(null);
 
   const textarea = useRef<HTMLTextAreaElement>(null);
-  const [save, load] = useStorage<Markdown>("mdprev-markdown");
-  const [darkmode, toggleDarkmode] = useDarkmode();
+  const [saveMarkdown, loadMarkdown] = useStorage<Markdown>("markdown");
+  const [saveHardBreak, loadHardBreak] = useStorage<boolean>("hardbreak");
 
   useEffectAsync(async () => {
-    const { markdown, cursor } = (await load()) || readme;
+    const { markdown, cursor } = (await loadMarkdown()) || readme;
+    const hardbreak = (await loadHardBreak()) ?? true;
     const html = await md2html(markdown);
     setMarkdown(markdown);
+    setHardBreak(hardbreak);
     setHtml(html);
     formattedCursor.current = cursor;
   }, []);
 
   useCtrlKeyDown("q", () => download(markdown));
-  useCtrlKeyDown("e", () => toggleDarkmode());
+  useCtrlKeyDown("e", () => toggleDarkMode());
   useCtrlKeyDown("s", () =>
-    save({ markdown, cursor: textarea.current.selectionStart })
+    saveMarkdown({ markdown, cursor: textarea.current.selectionStart })
   );
   useCtrlKeyDown("d", async () => {
     const { formatted, cursorOffset } = await format(
@@ -39,6 +44,10 @@ const App: FunctionComponent = () => {
     );
     setMarkdown(formatted);
     formattedCursor.current = cursorOffset;
+  });
+  useCtrlKeyDown("b", () => {
+    saveHardBreak(!hardBreak);
+    toggleHardBreak();
   });
 
   useLayoutEffect(() => {
@@ -57,10 +66,10 @@ const App: FunctionComponent = () => {
 
   return (
     <Fragment>
-      <div class="container dark-layer" style={{ "--dark": +darkmode }}>
+      <div class="container dark-layer" style={{ "--dark": +darkMode }}>
         <textarea
           class="edit-area"
-          style={{ fontWeight: isWinChrome && darkmode ? "bold" : "normal" }}
+          style={{ fontWeight: isWinChrome && darkMode ? "bold" : "normal" }}
           value={markdown}
           onInput={onInput}
           ref={textarea}
@@ -68,7 +77,7 @@ const App: FunctionComponent = () => {
           spellcheck={false}
           placeholder="# mdpreview"
         />
-        <HtmlPreview html={html} />
+        <Previewer html={html} hardBreak={hardBreak} />
       </div>
     </Fragment>
   );

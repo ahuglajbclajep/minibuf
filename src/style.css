@@ -53,6 +53,10 @@ img {
   content: "";
   background: #e1e1e1;
   mix-blend-mode: difference;
-  opacity: var(--dark, 0);
+  opacity: var(--dark);
   transition: opacity 1s;
+}
+
+.markdown-body p {
+  white-space: var(--space);
 }
