@@ -13,30 +13,30 @@ import { format, md2html } from "./worker";
 
 const App: FunctionComponent = () => {
   const [markdown, setMarkdown] = useState("");
+  // `hardBreak` means treat normal line breaks like `  `
   const [hardBreak, toggleHardBreak, setHardBreak] = useToggle(false);
   const [html, setHtml] = useState("");
   const [darkMode, toggleDarkMode] = useDarkmode();
+  // this is the cursor position after formatting, and is also a flag whether the cursor should be moved
   const formattedCursor = useRef<number | null>(null);
 
   const textarea = useRef<HTMLTextAreaElement>(null);
   const [saveMarkdown, loadMarkdown] = useStorage<Markdown>("markdown");
   const [saveHardBreak, loadHardBreak] = useStorage<boolean>("hardbreak");
 
+  // load initial state from the storage
   useEffectAsync(async () => {
     const { markdown, cursor } = (await loadMarkdown()) || readme;
-    const hardbreak = (await loadHardBreak()) ?? true;
+    const hardbreak = (await loadHardBreak()) || false;
     const html = await md2html(markdown);
+
     setMarkdown(markdown);
     setHardBreak(hardbreak);
     setHtml(html);
     formattedCursor.current = cursor;
   }, []);
 
-  useCtrlKeyDown("q", () => download(markdown));
-  useCtrlKeyDown("e", () => toggleDarkMode());
-  useCtrlKeyDown("s", () =>
-    saveMarkdown({ markdown, cursor: textarea.current.selectionStart })
-  );
+  // format
   useCtrlKeyDown("d", async () => {
     const { formatted, cursorOffset } = await format(
       markdown,
@@ -45,7 +45,24 @@ const App: FunctionComponent = () => {
     setMarkdown(formatted);
     formattedCursor.current = cursorOffset;
   });
+
+  // save
+  useCtrlKeyDown("s", () =>
+    saveMarkdown({
+      markdown,
+      cursor: textarea.current.selectionStart
+    })
+  );
+
+  // download
+  useCtrlKeyDown("q", () => download(markdown));
+
+  // darkmode
+  useCtrlKeyDown("e", () => toggleDarkMode());
+
+  // hardbreak
   useCtrlKeyDown("b", () => {
+    // saves the state reversed by `toggle`
     saveHardBreak(!hardBreak);
     toggleHardBreak();
   });
@@ -65,10 +82,12 @@ const App: FunctionComponent = () => {
   };
 
   return (
+    // see https://github.com/microsoft/TypeScript/issues/20469
     <Fragment>
       <div class="container dark-layer" style={{ "--dark": +darkMode }}>
         <textarea
           class="edit-area"
+          // on Windows Chrome, characters are too thin in dark mode
           style={{ fontWeight: isWinChrome && darkMode ? "bold" : "normal" }}
           value={markdown}
           onInput={onInput}

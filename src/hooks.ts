@@ -15,13 +15,14 @@ const useToggle = (
   const [state, setState] = useState(initialState);
   const toggle = useCallback(() => setState(prev => !prev), []);
 
+  // `setState` can be used to initialize or reset `state`
   return [state, toggle, setState];
 };
 
 const useDarkmode = (): ReturnType<typeof useToggle> =>
   useToggle(matchMedia("(prefers-color-scheme: dark)").matches);
 
-const namespace = "mdprev";
+const namespace = "mdprev"; // IndexedDB is shared within a domain
 const useStorage = <T>(
   key: string
 ): [(value: T) => Promise<void>, () => Promise<T | null>] => {
@@ -32,8 +33,7 @@ const useStorage = <T>(
 };
 
 const useEffectAsync = (
-  // cleanup function is not supported
-  effect: () => Promise<void>,
+  effect: () => Promise<void>, // cleanup function is not supported
   inputs?: Inputs
 ): void => {
   useEffect(() => {

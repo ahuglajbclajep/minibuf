@@ -1,11 +1,12 @@
 const markdown = `# mdpreview
 
-Small and fast Markdown previewer/editor with formatter.
+Small and fast Markdown editor with formatter.
 
-- format: \`ctrl\` + \`d\`
-- save: \`ctrl\` + \`s\`
-- download: \`ctrl\` + \`q\`
-- darkmode: \`ctrl\` + \`e\`
+- format:    \`ctrl\` + \`d\`
+- save:      \`ctrl\` + \`s\`
+- download:  \`ctrl\` + \`q\`
+- darkmode:  \`ctrl\` + \`e\`
+- hardbreak: \`ctrl\` + \`b\`
 
 GitHub: <https://github.com/ahuglajbclajep/mdpreview>
 `;

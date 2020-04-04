@@ -1,7 +1,7 @@
 {
   "name": "mdpreview",
   "version": "2.0.0",
-  "description": "Small and fast Markdown previewer/editor with formatter.",
+  "description": "Small and fast Markdown editor with formatter.",
   "private": true,
   "scripts": {
     "start": "webpack-dev-server --open",

@@ -44,6 +44,10 @@ img {
   border-radius: 0; /* for iOS Safari */
 }
 
+.markdown-body p {
+  white-space: var(--space);
+}
+
 /* see https://dev.wgao19.cc/sun-moon-blending-mode */
 .container::before {
   position: fixed;
@@ -55,8 +59,4 @@ img {
   mix-blend-mode: difference;
   opacity: var(--dark);
   transition: opacity 1s;
-}
-
-.markdown-body p {
-  white-space: var(--space);
 }
