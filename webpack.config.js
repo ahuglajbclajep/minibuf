@@ -18,18 +18,18 @@ module.exports = (env, { mode }) => {
         {
           test: /\.?worker\.[tj]s$/,
           // comlink-loader also receives worker-loader options
-          use: "comlink-loader?singleton&name=[name].js"
+          loader: "comlink-loader?singleton&name=[name].js",
         },
         {
           test: /\.[tj]sx?$/,
-          use: "ts-loader",
-          exclude: /node_modules/
+          loader: "ts-loader",
+          exclude: /node_modules/,
         },
         {
           test: /\.css$/,
-          use: [MiniCssExtractPlugin.loader, `css-loader?sourceMap=${dev}`]
-        }
-      ]
+          use: [MiniCssExtractPlugin.loader, `css-loader?sourceMap=${dev}`],
+        },
+      ],
     },
     plugins: [
       new HtmlWebpackPlugin({ template: "src/index.html" }),
@@ -38,19 +38,19 @@ module.exports = (env, { mode }) => {
         clientsClaim: true,
         skipWaiting: true,
         inlineWorkboxRuntime: true,
-        sourcemap: dev
-      })
+        sourcemap: dev,
+      }),
     ],
     resolve: { extensions: [".ts", ".tsx", ".js"] },
     optimization: {
-      minimizer: [new TerserPlugin(), new OptimizeCssAssetsPlugin()]
+      minimizer: [new TerserPlugin(), new OptimizeCssAssetsPlugin()],
     },
     devtool: dev ? "inline-source-map" : false,
     devServer: {
       contentBase: "./dist",
       // host: "0.0.0.0", // for debugging on mobile devices
       overlay: true,
-      watchContentBase: true
-    }
+      watchContentBase: true,
+    },
   };
 };
