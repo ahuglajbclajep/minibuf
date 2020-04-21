@@ -8,7 +8,10 @@ module.exports = {
   rules: {
     // `stylelint-disable` comments do not work in JSX, so set them in here instead
     "function-name-case": ["lower", { ignoreFunctions: [] }],
-    "value-keyword-case": ["lower", { ignoreKeywords: [] }],
+    "value-keyword-case": [
+      "lower",
+      { ignoreKeywords: [/darkMode/, "isWinChrome", "hardBreak"] },
+    ],
   },
   // for VS Code
   ignoreFiles: ["node_modules/**", "dist"],

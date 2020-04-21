@@ -1,11 +1,11 @@
 import { Fragment, FunctionComponent, h, JSX } from "preact";
-import { useLayoutEffect, useRef, useState } from "preact/hooks";
+import { useCallback, useLayoutEffect, useRef, useState } from "preact/hooks";
 import {
   useCtrlKeyDown,
   useDarkmode,
   useEffectAsync,
   useStorage,
-  useToggle
+  useToggle,
 } from "./hooks";
 import Previewer from "./Previewer";
 import { download, isWinChrome, moveCursor, readme } from "./util";
@@ -50,7 +50,7 @@ const App: FunctionComponent = () => {
   useCtrlKeyDown("s", () =>
     saveMarkdown({
       markdown,
-      cursor: textarea.current.selectionStart
+      cursor: textarea.current.selectionStart,
     })
   );
 
@@ -74,12 +74,15 @@ const App: FunctionComponent = () => {
     }
   });
 
-  const onInput: JSX.GenericEventHandler<HTMLTextAreaElement> = async e => {
-    const markdown = e.currentTarget.value;
-    const html = await md2html(markdown);
-    setMarkdown(markdown);
-    setHtml(html);
-  };
+  const onInput: JSX.GenericEventHandler<HTMLTextAreaElement> = useCallback(
+    async (e) => {
+      const markdown = e.currentTarget.value;
+      const html = await md2html(markdown);
+      setMarkdown(markdown);
+      setHtml(html);
+    },
+    []
+  );
 
   return (
     // see https://github.com/microsoft/TypeScript/issues/20469
