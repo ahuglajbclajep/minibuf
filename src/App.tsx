@@ -97,7 +97,7 @@ const App: FunctionComponent = () => {
           ref={textarea}
           autoFocus
           spellcheck={false}
-          placeholder="# mdpreview"
+          placeholder="# minibuf"
         />
         <Previewer html={html} hardBreak={hardBreak} />
       </div>

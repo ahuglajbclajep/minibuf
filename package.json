@@ -1,5 +1,5 @@
 {
-  "name": "mdpreview",
+  "name": "minibuf",
   "version": "2.0.0",
   "description": "Small and fast Markdown editor with formatter.",
   "private": true,

@@ -1,8 +1,8 @@
-# mdpreview
+# minibuf
 
 Small and fast Markdown editor with formatter.
 
-Try here: <https://ahuglajbclajep.github.io/mdpreview>
+Try here: <https://ahuglajbclajep.github.io/minibuf>
 
 ## Usage
 

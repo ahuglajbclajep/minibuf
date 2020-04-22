@@ -1,4 +1,4 @@
-const markdown = `# mdpreview
+const markdown = `# minibuf
 
 Small and fast Markdown editor with formatter.
 
@@ -8,7 +8,7 @@ Small and fast Markdown editor with formatter.
 - darkmode:  \`ctrl\` + \`e\`
 - hardbreak: \`ctrl\` + \`b\`
 
-GitHub: <https://github.com/ahuglajbclajep/mdpreview>
+GitHub: <https://github.com/ahuglajbclajep/minibuf>
 `;
 
 const readme: Markdown = { markdown, cursor: markdown.length };

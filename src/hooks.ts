@@ -6,14 +6,14 @@ import {
   useCallback,
   useEffect,
   useRef,
-  useState
+  useState,
 } from "preact/hooks";
 
 const useToggle = (
   initialState: boolean
 ): [boolean, () => void, StateUpdater<boolean>] => {
   const [state, setState] = useState(initialState);
-  const toggle = useCallback(() => setState(prev => !prev), []);
+  const toggle = useCallback(() => setState((prev) => !prev), []);
 
   // `setState` can be used to initialize or reset `state`
   return [state, toggle, setState];
@@ -22,7 +22,7 @@ const useToggle = (
 const useDarkmode = (): ReturnType<typeof useToggle> =>
   useToggle(matchMedia("(prefers-color-scheme: dark)").matches);
 
-const namespace = "mdprev"; // IndexedDB is shared within a domain
+const namespace = "minibuf"; // IndexedDB is shared within a domain
 const useStorage = <T>(
   key: string
 ): [(value: T) => Promise<void>, () => Promise<T | null>] => {
