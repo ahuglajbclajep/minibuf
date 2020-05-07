@@ -76,6 +76,7 @@ const App: FunctionComponent = () => {
 
   const onInput: JSX.GenericEventHandler<HTMLTextAreaElement> = useCallback(
     async (e) => {
+      // maybe `currentTarget.value` can only be read once?
       const markdown = e.currentTarget.value;
       const html = await md2html(markdown);
       setMarkdown(markdown);
@@ -87,7 +88,7 @@ const App: FunctionComponent = () => {
   return (
     // see https://github.com/microsoft/TypeScript/issues/20469
     <Fragment>
-      <div class="container dark-layer" style={{ "--dark": +darkMode }}>
+      <div class="container" style={{ "--dark": +darkMode }}>
         <textarea
           class="edit-area"
           // on Windows Chrome, characters are too thin in dark mode

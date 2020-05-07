@@ -20,7 +20,7 @@ body {
 
 img {
   vertical-align: bottom;
-  isolation: isolate;
+  isolation: isolate; /* for darkmode */
 }
 
 .container {
