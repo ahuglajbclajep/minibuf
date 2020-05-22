@@ -36,7 +36,7 @@ img {
 }
 
 .edit-area {
-  font: 1.2em "Courier New", monospace;
+  font: 1.1em Menlo, Monaco, Consolas, "Courier New", Meiryo, monospace;
   color: #24292e;
   resize: none;
   border: 0;

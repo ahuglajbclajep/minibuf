@@ -8,7 +8,7 @@ import {
   useToggle,
 } from "./hooks";
 import Previewer from "./Previewer";
-import { download, isWinChrome, moveCursor, readme } from "./util";
+import { download, moveCursor, readme } from "./util";
 import { format, md2html } from "./worker";
 
 const App: FunctionComponent = () => {
@@ -91,8 +91,6 @@ const App: FunctionComponent = () => {
       <div class="container" style={{ "--dark": +darkMode }}>
         <textarea
           class="edit-area"
-          // on Windows Chrome, characters are too thin in dark mode
-          style={{ fontWeight: isWinChrome && darkMode ? "bold" : "normal" }}
           value={markdown}
           onInput={onInput}
           ref={textarea}
