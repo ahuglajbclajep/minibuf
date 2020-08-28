@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+
 import { get, set } from "idb-keyval";
 import {
   Inputs,
@@ -55,10 +56,10 @@ const useCtrlKeyDown = (key: string, handler: Handler): void => {
       }
     };
 
-    window.addEventListener("keydown", listener);
+    document.addEventListener("keydown", listener);
 
     return (): void => {
-      window.removeEventListener("keydown", listener);
+      document.removeEventListener("keydown", listener);
     };
   }, []);
 };

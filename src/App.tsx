@@ -86,8 +86,7 @@ const App: FunctionComponent = () => {
   );
 
   return (
-    // see https://github.com/microsoft/TypeScript/issues/20469
-    <Fragment>
+    <>
       <div class="container" style={{ "--dark": +darkMode }}>
         <textarea
           class="edit-area"
@@ -100,7 +99,7 @@ const App: FunctionComponent = () => {
         />
         <Previewer html={html} hardBreak={hardBreak} />
       </div>
-    </Fragment>
+    </>
   );
 };
 
