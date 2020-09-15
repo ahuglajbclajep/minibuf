@@ -1,4 +1,5 @@
-const markdown = `# minibuf
+const markdown = `\
+# minibuf
 
 Small and fast Markdown editor with formatter.
 
