@@ -12,7 +12,7 @@ let plugin: typeof import("prettier/parser-markdown") | undefined;
 (async (): Promise<void> => {
   [formatter, plugin] = await Promise.all([
     import("prettier/standalone"),
-    import("prettier/parser-markdown")
+    import("prettier/parser-markdown"),
   ] as const);
 })();
 
@@ -30,7 +30,7 @@ async function format(markdown: string, cursor: number): Promise<Formatted> {
     ? formatter.formatWithCursor(markdown, {
         cursorOffset: cursor,
         parser: "markdown",
-        plugins: [plugin]
+        plugins: [plugin],
       })
     : { formatted: markdown, cursorOffset: cursor };
 }
