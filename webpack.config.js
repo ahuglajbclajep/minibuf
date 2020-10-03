@@ -5,7 +5,7 @@ const TerserPlugin = require("terser-webpack-plugin"); // from webpack
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const package = require("./package.json");
 
-/** @type {(env: typeof process.env, argv: { mode?: string }) => import("webpack").Configuration} */
+/** @type {import("webpack").ConfigurationFactory} */
 module.exports = (env, { mode }) => {
   const dev = mode !== "production";
   return {
@@ -52,16 +52,17 @@ module.exports = (env, { mode }) => {
         sourcemap: dev,
       }),
     ],
-    resolve: { extensions: [".ts", ".tsx", ".js"] },
+    resolve: { extensions: [".ts", ".tsx", ".js", ".jsx"] },
     optimization: {
       minimizer: [new TerserPlugin(), new OptimizeCssAssetsPlugin()],
     },
     devtool: dev ? "inline-source-map" : false,
     devServer: {
-      contentBase: "./dist",
       // host: "0.0.0.0", // for debugging on mobile devices
+      historyApiFallback: true,
+      contentBase: "./public", // for static file serving
+      // watchContentBase: true,
       overlay: true,
-      watchContentBase: true,
     },
   };
 };
